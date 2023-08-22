@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :authenticate_user!, only: [:logout]
+  before_action :authenticate_user!, only: [:start, :logout]
 
   def home
   end
@@ -7,7 +7,28 @@ class PagesController < ApplicationController
   def apply
   end
 
+  def thanks
+  end
+
+
+  def magic_login
+    user = User.find_by(auth_code: params[:auth_code])
+
+    if user
+      sign_in(user)
+      redirect_to start_path
+    else
+      redirect_to user_session_path, alert: "We couldn´t find that user, please log in manually"
+    end
+  end
+
+
   def start
+    @project = current_user.default_project
+
+    if (@project.title? && @project.description?)
+      redirect_to dashboard_path, alert: "You already created your project."
+    end
   end
 
   def admin

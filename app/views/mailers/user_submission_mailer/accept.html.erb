@@ -1,0 +1,11 @@
+<p>Hi <%= @name %>,</p>
+
+<p>We have reviewed your application for Foundr Digest and and are excited to extend and invitation to Join!</p>
+
+<p>Get started here:
+<br>
+<a href="<%= ENV['BASE_URL'] + '/magic_login?auth_code=' + @auth_code %>" target="_blank"><%= ENV['BASE_URL'] + '/magic_login' %></a>
+
+</p>
+
+<p>Founder Digest Team</p>

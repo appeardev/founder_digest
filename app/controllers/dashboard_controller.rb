@@ -1,8 +1,10 @@
 class DashboardController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_flashes
 
   def index
+    @project = current_user.default_project
+    @other_projects = Project.ready.except(@project)
   end
 
   private
