@@ -5,8 +5,6 @@ Rails.application.routes.draw do
   get 'start', to: 'pages#start', as: 'start'
   get 'magic_login', to: 'pages#magic_login', as: 'magic_login'
 
-
-
   devise_for :users
   get 'logout', to: 'pages#logout', as: 'logout'
 
@@ -15,13 +13,14 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboard#index'
 
   get 'stakeholder_updates/new', to: 'stakeholder_updates#new'
-  resources :stakeholder_updates, only: [:new, :create]
+  resources :stakeholder_updates, only: [:new, :create, :show, :update]
+
+  resources :updates, only: [:show]
 
   resources :account, only: [:index, :update]
   resources :billing_portal, only: [:create]
   match '/billing_portal' => 'billing_portal#create', via: [:get]
   match '/cancel' => 'billing_portal#destroy', via: [:get]
-
 
   resources :user_submissions, only: [:create, :update]
   resources :projects, only: [:update]
@@ -41,8 +40,6 @@ namespace :admin do
   get '/', to: 'pages#dashboard'
   resources :user_submissions, only: [:update]
 end
-
-
 
   # admin panels
   # authenticated :user, -> user { user.admin? } do

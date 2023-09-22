@@ -1,10 +1,8 @@
 class Admin::UserSubmissionsController < ApplicationController
-
 before_action :set_user_submission
 
 def update
   @user_submission.update(user_submission_params)
-  # TODO: send mailer with accepted or rejected status
   redirect_to admin_path, notice: 'User submission updated successfully'
 end
 

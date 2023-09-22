@@ -29,3 +29,13 @@
   padding: 0 !important;
   max-width: 100% !important;
 }
+
+/* custom */
+
+.trix-content a {
+ text-decoration: underline;
+ color: #f1a96c;
+}
+
+/* hides attachments button */
+.trix-button-group--file-tools { display: none !important; }
