@@ -7,13 +7,15 @@ Rails.application.routes.draw do
 
   devise_for :users
   get 'logout', to: 'pages#logout', as: 'logout'
+  get 'login', to: redirect(path: '/users/sign_in') # use of "path" persists parameters
+
 
   resources :subscribe, only: [:index]
 
   get 'dashboard', to: 'dashboard#index'
 
   get 'stakeholder_updates/new', to: 'stakeholder_updates#new'
-  resources :stakeholder_updates, only: [:new, :create, :show, :update]
+  resources :stakeholder_updates, only: [:new, :create, :show, :update, :edit]
 
   resources :updates, only: [:show]
 
@@ -36,20 +38,15 @@ Rails.application.routes.draw do
     get "/#{page}", to: "pages##{page}", as: "#{page.gsub('-', '_')}"
   end
 
-namespace :admin do
-  get '/', to: 'pages#dashboard'
-  resources :user_submissions, only: [:update]
-end
 
-  # admin panels
-  # authenticated :user, -> user { user.admin? } do
-  #   namespace :admin do
-  #     resources :dashboard, only: [:index]
-  #     resources :impersonations, only: [:new]
-  #     resources :users, only: [:edit, :update, :destroy]
-  #   end
-  #
-  #   # convenience helper
-  #   get 'admin', to: 'admin/dashboard#index'
-  # end
+
+
+# admin panels
+
+authenticated :user, -> user { user.admin? } do
+  namespace :admin do
+    get '/', to: 'pages#dashboard'
+    resources :user_submissions, only: [:update]
+    end
+  end
 end

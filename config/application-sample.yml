@@ -7,5 +7,5 @@ development:
   STRIPE_SECRET_KEY: sk_test_51NrxwhDDhU2vh5e9eqdUPPEex49THLNNc7UvDdArN7NJSmAgO1ebya1s4yV9hKuMraRayx3g3tND04v3GPf7TLWL00W9XWELxS
 production:
   BASE_URL: https://founderdigest.softwarecomoservicio.com
-  STRIPE_PRODUCT_PRICE_ID: price_1asdfasdf
+  STRIPE_PRODUCT_PRICE_ID: 
   STRIPE_SECRET_KEY:

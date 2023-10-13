@@ -41,7 +41,6 @@
         | <a href="<%= stakeholder_update_path(current_user.stakeholder_updates.last) %>" class="text-brand-orange underline">View last</a>
         <% end %>
       </p>
-<p><a href="<%= account_index_path %>" class="text-brand-blue underline">Edit subscription</a></p>
 </div>
 
   </div>
@@ -55,6 +54,7 @@
 
 
 <div class="p-5 max-w-5xl mx-auto space-y-6 ">
+  <p class='text-right'>Subscribed to:</p>
   <% @other_projects.each do |other_project| %>
   <div class="flex border border-dashed border-2 p-4">
 
@@ -82,7 +82,7 @@
 
       <label for="<%= other_project.id %>_subscribed_status" class="font-medium text-gray-700">
 
-        {{ Subscribed Status }}
+      Subscribe
 
       </label>
       <input onchange="checkboxChanged(this)" <%= 'checked' if subscriber %> data-subscriber-id="<%= subscriber.try(:id) %>" data-project-id="<%= other_project.id %>" id="<%= other_project.id %>_subscribed_status" aria-describedby="subscribed" name="subscribed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange-dark">
@@ -98,14 +98,14 @@
     let projectId = checkbox.dataset.projectId;
 
     if (checkbox.checked) {
-      createSubscription(projectId);
+      createSubscription(projectId, checkbox);
     } else {
       let subscriberId = checkbox.dataset.subscriberId;
       deleteSubscription(projectId, subscriberId);
     }
   }
 
-  function createSubscription(projectId) {
+  function createSubscription(projectId, checkbox) {
     $.ajax({
       url: '/subscribers',
       method: 'POST',
@@ -113,10 +113,12 @@
       success: function(data){
         console.log('received response from CREATE subscriber request');
         console.log(data);
-        let subscriberId = data.subscriber_id;
-        let projectId = data.project_id;
-        let checkbox = document.getElementById(projectId + '_subscribed_status')
-        checkbox.dataset.subscriberId = subscriberId;
+        if (data.success) {
+          checkbox.dataset.subscriberId = data.subscriber_id;
+        } else {
+          checkbox.checked = false; // revert user's intended behavior in UI
+          alert(data.error);
+        }
       }
     })
   }
@@ -127,8 +129,7 @@
       method: 'DELETE',
       data: { subscriber: { project_id: projectId } },
       success: function(data){
-        console.log('received response from DELETE subscriber request');
-        console.log(data);
+        console.log('subscriber deleted');
       }
     })
   }

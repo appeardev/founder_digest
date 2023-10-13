@@ -27,7 +27,7 @@ class PagesController < ApplicationController
     @project = current_user.default_project
 
     if (@project.title? && @project.description?)
-      redirect_to dashboard_path, alert: "You already created your project."
+      redirect_to dashboard_path, notice: "You already created your project."
     end
   end
 
