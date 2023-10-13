@@ -1,24 +1,25 @@
-class UserSubmission < ApplicationRecord
-  include RandomStringable
-  PLAN_NAMES = ['free', 'pro']
+  class UserSubmission < ApplicationRecord
+    include RandomStringable
 
-  validates_presence_of :first_name, :last_name, :email, :website, :job_role, :text
-  validates :plan_name, inclusion: { in: PLAN_NAMES }
+    PLAN_NAMES = ['free', 'pro']
 
-  after_update :finish_procesing
+    validates_presence_of :first_name, :last_name, :email, :website, :job_role, :text
+    validates :plan_name, inclusion: { in: PLAN_NAMES }
 
-  def name
-    "#{first_name} #{last_name}"
-  end
+    after_update :finish_processing
 
-  def finish_procesing
-    reject! if status == 'Reject'
-    accept! if status == 'Accept'
-  end
+    def name
+      "#{first_name} #{last_name}"
+    end
 
-  def reject!
+    def finish_processing
+      reject! if status == 'Reject'
+      accept! if status == 'Accept'
+    end
+
+    def reject!
       UserSubmissionMailer.reject(self).deliver
-  end
+    end
 
     def accept!
       temp_password = generate_random_string
